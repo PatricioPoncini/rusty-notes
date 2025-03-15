@@ -1,15 +1,15 @@
-## Axum Backend
-Un backend en Rust con Axum
+# Axum Backend 🦀
+A backend built with Rust and Axum.
 
-## `Levantar servidor`
-Correr el comando:
+## 🚀 Running the Server
+Start the server with:
 ```bash
 cargo run
 ```
-Y se levantará en el puerto `:8080`
+By default, it will run on port `:8080`
 
-## `Build del proyecto`
-Se hace el build con:
+## 🛠️ Building the Project
+Compile the project using:
 ```bash
 cargo build
 ```
