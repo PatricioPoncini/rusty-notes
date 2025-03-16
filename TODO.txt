@@ -1,3 +1,0 @@
-- variables env (cargar todas al iniciar el back o fallar, no puede faltar ninguna)
-- primeras tablas en la db
-- primeros endpoints para interactuar
