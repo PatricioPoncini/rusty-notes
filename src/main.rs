@@ -1,12 +1,16 @@
 mod logger;
 mod db;
 mod env;
-use axum::{middleware, Router};
-use axum::routing::get;
+mod routes;
+
+use std::sync::{Arc};
+use axum::{middleware, Extension, Router};
+use axum::routing::{get, post};
 use tracing::{error, info};
 use crate::db::root::connect_db;
-use crate::env::{init_env};
+use crate::env::{get_env, init_env};
 use crate::logger::root::{init_logger, logging_middleware};
+use crate::routes::note::create_note;
 
 #[tokio::main]
 async fn main() {
@@ -17,14 +21,24 @@ async fn main() {
         std::process::exit(1);
     }
 
-    connect_db().await.unwrap();
+    let db_pool = match connect_db().await {
+        Ok(pool) => pool,
+        Err(e) => {
+            error!("Failed to connect to database: {}", e);
+            std::process::exit(1);
+        }
+    };
+
+    let shared_pool = Arc::new(db_pool);
 
     let app = Router::new()
         .route("/ping", get(|| async { "pong" }))
+        .route("/notes", post(create_note))
+        .layer(middleware::from_fn(logging_middleware))
+        .layer(Extension(shared_pool))
         .layer(middleware::from_fn(logging_middleware));
 
-
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await.unwrap();
-    info!("🚀 Server running on port :8080");
+    let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", get_env("PORT"))).await.unwrap();
+    info!("{}", format!("🚀 Server running on port :{}", get_env("PORT")));
     axum::serve(listener, app).await.unwrap();
 }
