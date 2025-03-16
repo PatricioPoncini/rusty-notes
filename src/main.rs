@@ -10,6 +10,7 @@ use tracing::{error, info};
 use crate::db::root::connect_db;
 use crate::env::{get_env, init_env};
 use crate::logger::root::{init_logger, logging_middleware};
+use crate::routes::doc::{doc, openapi_yaml};
 use crate::routes::note::{create_note, delete_note, get_all_notes, update_note};
 
 #[tokio::main]
@@ -37,7 +38,8 @@ async fn main() {
         .route("/notes", get(get_all_notes))
         .route("/notes/{id}", put(update_note))
         .route("/notes/{id}", delete(delete_note))
-        .layer(middleware::from_fn(logging_middleware))
+        .route("/doc", get(doc))
+        .route("/openapi.yaml", get(openapi_yaml))        .layer(middleware::from_fn(logging_middleware))
         .layer(Extension(shared_pool))
         .layer(middleware::from_fn(logging_middleware));
 

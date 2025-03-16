@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Notes API
+  description: API for managing notes in the system
+  version: 1.0.0
+
+paths:
+  /notes:
+    post:
+      summary: Create a new note
+      description: Creates a new note with the specified title and description.
+      operationId: createNote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Note Title"
+                description:
+                  type: string
+                  example: "Note description"
+      responses:
+        '201':
+          description: Note successfully created
+        '500':
+          description: Internal server error
+
+    get:
+      summary: Get all notes
+      description: Retrieves a list of all notes in the system.
+      operationId: getAllNotes
+      responses:
+        '200':
+          description: A list of all notes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: "Note Title"
+                    description:
+                      type: string
+                      example: "Note description"
+        '500':
+          description: Internal server error
+
+  /notes/{id}:
+    put:
+      summary: Update an existing note
+      description: Updates the title and description of the specified note by ID.
+      operationId: updateNote
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the note to update.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Updated Note Title"
+                description:
+                  type: string
+                  example: "Updated note description"
+      responses:
+        '204':
+          description: Note successfully updated
+        '404':
+          description: Note not found
+        '500':
+          description: Internal server error
+
+    delete:
+      summary: Delete an existing note
+      description: Deletes the note specified by the ID.
+      operationId: deleteNote
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the note to delete.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Note successfully deleted
+        '404':
+          description: Note not found
+        '500':
+          description: Internal server error
