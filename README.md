@@ -13,3 +13,9 @@ Compile the project using:
 ```bash
 cargo build
 ```
+
+## 🐳 Access the Container
+Use this command to enter the container and connect directly to the database:
+```bash
+docker exec -it postgres_db psql -U admin -d axum_db
+```
