@@ -39,7 +39,8 @@ async fn main() {
         .route("/notes/{id}", put(update_note))
         .route("/notes/{id}", delete(delete_note))
         .route("/doc", get(doc))
-        .route("/openapi.yaml", get(openapi_yaml))        .layer(middleware::from_fn(logging_middleware))
+        .route("/openapi.yaml", get(openapi_yaml))
+        .layer(middleware::from_fn(logging_middleware))
         .layer(Extension(shared_pool))
         .layer(middleware::from_fn(logging_middleware));
 

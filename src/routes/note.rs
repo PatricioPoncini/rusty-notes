@@ -24,7 +24,8 @@ pub async fn create_note(
         Ok(_) => {
             (StatusCode::CREATED).into_response()
         }
-        Err(_e) => {
+        Err(e) => {
+            error!("{}", e);
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to create note").into_response()
         }
     }
