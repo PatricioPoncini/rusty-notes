@@ -23,8 +23,11 @@ impl FromRow<'_, PgRow> for Note {
 
 impl Note {
     pub async fn save_note(pool: &PgPool, title: &str, description: &str) -> Result<(), Box<dyn Error>> {
+        let mut txn = pool.begin().await?;
         let query = "INSERT INTO notes (title, description) VALUES ($1, $2)";
-        sqlx::query(query).bind(title).bind(description).execute(pool).await?;
+        sqlx::query(query).bind(title).bind(description).execute(&mut *txn).await?;
+
+        txn.commit().await?;
 
         Ok(())
     }
@@ -40,23 +43,31 @@ impl Note {
     }
 
     pub async fn update(pool: &PgPool, id: i32, title: &str, description: &str) -> Result<u64, Box<dyn Error>> {
+        let mut txn= pool.begin().await?;
+
         let query = "UPDATE notes SET title = $1, description = $2 WHERE id = $3";
         let result = sqlx::query(query)
             .bind(title)
             .bind(description)
             .bind(id)
-            .execute(pool)
+            .execute(&mut *txn)
             .await?;
+
+        txn.commit().await?;
 
         Ok(result.rows_affected())
     }
 
     pub async fn delete(pool: &PgPool, id: i32) -> Result<u64, Box<dyn Error>> {
+        let mut txn= pool.begin().await?;
+
         let query = "DELETE FROM notes WHERE id = $1";
         let result = sqlx::query(query)
             .bind(id)
-            .execute(pool)
+            .execute(&mut *txn)
             .await?;
+
+        txn.commit().await?;
 
         Ok(result.rows_affected())
     }
