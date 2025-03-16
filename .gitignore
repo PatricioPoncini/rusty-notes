@@ -50,3 +50,6 @@ logs/*
 # docker volumes
 data
 .data
+
+# .env file
+.env
