@@ -1,17 +1,18 @@
-mod logger;
 mod db;
 mod env;
+mod logger;
 mod routes;
+mod test;
 
-use std::sync::{Arc};
-use axum::{middleware, Extension, Router};
-use axum::routing::{delete, get, post, put};
-use tracing::{error, info};
 use crate::db::root::connect_db;
 use crate::env::{get_env, init_env};
 use crate::logger::root::{init_logger, logging_middleware};
 use crate::routes::doc::{doc, openapi_yaml};
 use crate::routes::note::{create_note, delete_note, get_all_notes, update_note};
+use axum::routing::{delete, get, post, put};
+use axum::{Extension, Router, middleware};
+use std::sync::Arc;
+use tracing::{error, info};
 
 #[tokio::main]
 async fn main() {
@@ -44,7 +45,12 @@ async fn main() {
         .layer(Extension(shared_pool))
         .layer(middleware::from_fn(logging_middleware));
 
-    let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", get_env("PORT"))).await.unwrap();
-    info!("{}", format!("🚀 Server running on port :{}", get_env("PORT")));
+    let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", get_env("PORT")))
+        .await
+        .unwrap();
+    info!(
+        "{}",
+        format!("🚀 Server running on port :{}", get_env("PORT"))
+    );
     axum::serve(listener, app).await.unwrap();
 }

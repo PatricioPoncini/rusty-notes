@@ -1,4 +1,3 @@
-use tracing_subscriber;
 use axum::{
     body::Body,
     extract::MatchedPath,
@@ -8,11 +7,10 @@ use axum::{
 };
 use std::time::Instant;
 use tracing::info;
+use tracing_subscriber;
 
 pub fn init_logger() {
-    tracing_subscriber::fmt()
-        .with_env_filter("info")
-        .init();
+    tracing_subscriber::fmt().with_env_filter("info").init();
 }
 
 pub async fn logging_middleware(

@@ -1,21 +1,21 @@
+use dotenv::dotenv;
 use std::collections::HashMap;
 use std::env;
 use std::sync::OnceLock;
-use dotenv::dotenv;
 
 static ENV_STORE: OnceLock<HashMap<String, String>> = OnceLock::new();
 
 pub fn init_env() -> Result<(), String> {
     dotenv().ok();
 
-    let required_vars = ["PORT", "POSTGRES_URL"];
+    let required_vars = ["PORT", "DATABASE_URL"];
     let mut env_map = HashMap::new();
 
     for var_name in required_vars.iter() {
         match env::var(var_name) {
             Ok(value) => {
                 env_map.insert(var_name.to_string(), value);
-            },
+            }
             Err(_) => return Err(format!("Missing environment variable: {}", var_name)),
         }
     }

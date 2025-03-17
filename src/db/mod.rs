@@ -1,2 +1,2 @@
-pub mod root;
 pub mod models;
+pub mod root;

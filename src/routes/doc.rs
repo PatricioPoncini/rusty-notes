@@ -1,15 +1,11 @@
-use std::fs;
-use axum::http::{StatusCode};
+use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse};
+use std::fs;
 
 pub async fn openapi_yaml() -> impl IntoResponse {
     match fs::read_to_string("./openapi.yaml") {
-        Ok(content) => {
-            (StatusCode::OK, [("Content-Type", "text/yaml")], content).into_response()
-        },
-        Err(_) => {
-            (StatusCode::NOT_FOUND, "OpenAPI specification not found").into_response()
-        }
+        Ok(content) => (StatusCode::OK, [("Content-Type", "text/yaml")], content).into_response(),
+        Err(_) => (StatusCode::NOT_FOUND, "OpenAPI specification not found").into_response(),
     }
 }
 

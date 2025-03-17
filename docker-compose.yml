@@ -9,6 +9,11 @@ services:
       POSTGRES_DB: axum_db
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ['CMD-SHELL', "psql -U admin -d axum_db -c 'SELECT 1'"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -23,6 +28,12 @@ services:
       - "5050:80"
     depends_on:
       - postgres
+
+  wait-for-db-to-test:
+    image: hello-world
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:

@@ -1,12 +1,12 @@
-use std::sync::Arc;
-use axum::{Extension, Json};
+use crate::db::models::note::Note;
 use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use axum::{Extension, Json};
 use serde::Deserialize;
 use sqlx::PgPool;
+use std::sync::Arc;
 use tracing::error;
-use crate::db::models::note::Note;
 
 #[derive(Deserialize)]
 pub struct CreateNoteRequest {
@@ -18,12 +18,8 @@ pub async fn create_note(
     Extension(pool): Extension<Arc<PgPool>>,
     Json(req): Json<CreateNoteRequest>,
 ) -> impl IntoResponse {
-    match Note::save_note(&pool.clone(), &req.title, &req.description)
-        .await
-    {
-        Ok(_) => {
-            (StatusCode::CREATED).into_response()
-        }
+    match Note::save_note(&pool.clone(), &req.title, &req.description).await {
+        Ok(_) => (StatusCode::CREATED).into_response(),
         Err(e) => {
             error!("{}", e);
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to create note").into_response()
@@ -35,12 +31,8 @@ pub async fn get_all_notes(
     Extension(pool): Extension<Arc<PgPool>>,
     Json(_): Json<CreateNoteRequest>,
 ) -> impl IntoResponse {
-    match Note::get_all(&pool.clone())
-        .await
-    {
-        Ok(notes) => {
-            (StatusCode::CREATED, Json(notes)).into_response()
-        }
+    match Note::get_all(&pool.clone()).await {
+        Ok(notes) => (StatusCode::CREATED, Json(notes)).into_response(),
         Err(e) => {
             error!("{}", e);
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to get all notes").into_response()
