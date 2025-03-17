@@ -32,5 +32,11 @@ Use this command to enter the container and connect directly to the database:
 docker exec -it postgres_db psql -U admin -d axum_db
 ```
 
+## ✨ Format code
+Run the following command to automatically format the code:
+```shell
+make format
+```
+
 ## 📝 Documentation
 Once the server is running, the documentation will be available at `/doc`.
