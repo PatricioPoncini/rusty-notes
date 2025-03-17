@@ -1,5 +1,5 @@
 build:
-	@cargo build -p rusty_notes
+	@cargo build -p axum-with-sqlx
 .PHONY: build
 
 test:
