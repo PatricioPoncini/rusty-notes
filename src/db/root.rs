@@ -1,9 +1,9 @@
+use crate::env::get_env;
 use sqlx::{Error, PgPool, Pool, Postgres};
 use tracing::{error, info};
-use crate::env::get_env;
 
 pub async fn connect_db() -> Result<PgPool, Error> {
-    let url = get_env("POSTGRES_URL");
+    let url = get_env("DATABASE_URL");
     let pool = match PgPool::connect(&url).await {
         Ok(pool) => {
             info!("✅ Connected to database");
