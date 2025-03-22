@@ -40,3 +40,13 @@ make format
 
 ## 📝 Documentation
 Once the server is running, the documentation will be available at `/doc`.
+
+## ⚙ GitHub Actions
+In this project, I have integrated GitHub Actions to automate tasks such as building, testing, and formatting the code. The workflow includes the following actions:
+
+- **Build**: Compiles the project to ensure that there are no compilation issues.
+- **Test**: Executes the test cases after spinning up the required PostgreSQL container for testing database interactions.
+- **Format**: Automatically formats the code to ensure it adheres to the project's style guide.
+- **Clippy**: Runs Rust's linter to detect any potential issues in the code.
+
+This automated process helps ensure that every commit and pull request is validated, making the development process smoother and more reliable.
