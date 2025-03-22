@@ -14,10 +14,7 @@ use axum::{Extension, Router, middleware};
 use std::sync::Arc;
 use tracing::{error, info};
 
-#[tokio::main]
-async fn main() {
-    init_logger();
-
+pub async fn create_app() -> Router {
     if let Err(e) = init_env() {
         error!("Error loading environment variables: {}", e);
         std::process::exit(1);
@@ -33,7 +30,7 @@ async fn main() {
 
     let shared_pool = Arc::new(db_pool);
 
-    let app = Router::new()
+    Router::new()
         .route("/ping", get(|| async { "pong" }))
         .route("/notes", post(create_note))
         .route("/notes", get(get_all_notes))
@@ -43,8 +40,14 @@ async fn main() {
         .route("/openapi.yaml", get(openapi_yaml))
         .layer(middleware::from_fn(logging_middleware))
         .layer(Extension(shared_pool))
-        .layer(middleware::from_fn(logging_middleware));
+        .layer(middleware::from_fn(logging_middleware))
+}
 
+#[tokio::main]
+async fn main() {
+    init_logger();
+
+    let app = create_app().await;
     let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", get_env("PORT")))
         .await
         .unwrap();

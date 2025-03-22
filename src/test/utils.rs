@@ -8,8 +8,8 @@ pub async fn create_pool_connection(database_url: String) -> Pool<Postgres> {
         .connect(&database_url)
         .await;
 
-    return match pool_connection {
+    match pool_connection {
         Ok(pool) => pool,
         Err(err) => panic!("Connection failure: {:?}", err),
-    };
+    }
 }
