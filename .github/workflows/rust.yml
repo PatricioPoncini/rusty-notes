@@ -26,6 +26,9 @@ jobs:
       - name: Run formatter
         run: make format
 
+      - name: Run Clippy (Lint)
+        run: cargo clippy -- -D warnings
+
       - name: Build project
         run: make build
 
