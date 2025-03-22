@@ -1,4 +1,4 @@
-# Axum Backend 🦀
+# Rusty Notes 🦀
 A simple note-taking backend built with Rust, using the Axum framework for the API and PostgreSQL as the primary database technology. This backend allows you to create, read, update, and delete notes, with a focus on performance, scalability, and ease of use.
 
 # 🚀 Running the Server
