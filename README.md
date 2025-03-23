@@ -41,7 +41,7 @@ make format
 ## 📝 Documentation
 Once the server is running, the documentation will be available at `/doc`.
 
-## ⚙ GitHub Actions
+## ⚙️ GitHub Actions
 In this project, I have integrated GitHub Actions to automate tasks such as building, testing, and formatting the code. The workflow includes the following actions:
 
 - **Build**: Compiles the project to ensure that there are no compilation issues.
